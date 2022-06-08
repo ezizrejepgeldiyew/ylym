@@ -20,7 +20,7 @@
                                         alt="{{ $item->name }}"></a>
                             </div>
                         @endforeach
-
+                        {{__('messages.welcome')}}
 
                     </div>
 

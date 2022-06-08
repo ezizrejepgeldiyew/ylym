@@ -5,45 +5,57 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\LessonName;
 use App\Models\Question;
-use App\Models\right_answer;
 use App\Models\TalypLogin;
-use Carbon\Carbon;
-use GrahamCampbell\ResultType\Success;
+use App\Models\usertime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class TestController extends Controller
 {
+    use WithPagination;
+
+
+
     public function usertest(){
         $LessonName=LessonName::get();
         $TalypLogin=TalypLogin::pluck('jogap_s');
-        $Question=Question::where('lesson_id',request('id'))->with('LessonName')->paginate();
+        $Question=Question::where('lesson_id',request('id'))->with('LessonName')->paginate(1);
 
-        return view('User.usertest',compact('Question','TalypLogin'));
+        $user_id=Auth::user()->id;
+        $usertime=usertime::where('talyp_login_id',$user_id)->first();
+
+
+
+
+
+
+        if (empty($usertime)) {
+            $add= new usertime();
+            $add->talyp_login_id=$user_id;
+            $add->status='start';
+            $add->save();
+        }
+
+        $k=strtotime(now());
+        $time=(strtotime($usertime->created_at) + 360) - $k;
+        if($usertime->status == 'end') {
+            $time=0;
+        }
+
+        return view('User.usertest',compact('Question','TalypLogin','time'));
     }
 
     public function answertest(Request $request){
 
         $user_id=Auth::user()->id;
         $TalypLogin=TalypLogin::where('user_id',$user_id)->first();
-$date=TalypLogin::whereDate('created_at',Carbon::today())->get();
-dd($date);
-        $to_date = strtotime(date('Y-m-d'));
-        $from_date = strtotime($TalypLogin->created_at);
-        $day_diff = $from_date-$to_date;
-        dd($TalypLogin->created_at->diffForFormat);
-        dd(floor($day_diff/(60)));
-
 
         $d=Question::find($request->id);
 
         $bal=100 / count(Question::where('lesson_id',$d->lesson_id)->get());
 
-
-
         $q=$request->jogap == Question::find($request->id)->right_answer ? true : false;
-
-
 
         if(!empty($TalypLogin)){
             $a=$TalypLogin->jogap_s;

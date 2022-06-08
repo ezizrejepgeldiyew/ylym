@@ -12,7 +12,7 @@ use App\Http\Controllers\User\TestController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-use App\Models\TalypLogin;
+use App\Http\Livewire\Users;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +28,9 @@ use App\Models\TalypLogin;
 Route::controller(IndexController::class)->group(function(){
     Route::get('statistika','statistika')->name('statistika');
 });
+
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => '\App\Http\Controllers\LanguageController@switchLang']);
+Route::get('/languageDemo', '\App\Http\Controllers\HomeController@languageDemo');
 
 
 
@@ -61,3 +64,5 @@ Route::group(['middleware' => ['guest']], function(){
 
 
 Route::post('file-import', [ImportController::class, 'fileImport'])->name('file-import');
+
+

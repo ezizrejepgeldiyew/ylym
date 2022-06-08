@@ -18,4 +18,8 @@ class TalypLogin extends Model
     public function User(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+    public function UserTime(){
+        return $this->belongsTo(usertime::class,'user_id','talyp_login_id');
+    }
 }

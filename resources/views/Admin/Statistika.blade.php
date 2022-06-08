@@ -1,9 +1,8 @@
 @extends('layouts.app1')
 @section('skilet')
 
-@livewire('search_users')
 
-    <div id="timer"></div>
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container">
@@ -17,21 +16,25 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10px">#</th>
+
                                         <th>F.A.A</th>
                                         <th>Sapagyn ady</th>
                                         <th>Dogry jogap</th>
+                                        <th>Başlan wagty</th>
+                                        <th>Gutaran wagty</th>
                                         <th>Progress</th>
                                         <th style="width: 40px">Label</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($TalypLogin as $key => $item)
+                                    @foreach ($TalypLogin as $item)
                                         <tr>
-                                            <td>{{ $key + 1 }}</td>
+
                                             <td>{{ $item->User->name }}</td>
                                             <td>{{ $item->LessonName->name }}</td>
                                             <td>{{ count(json_decode($item->dogry_j)) }}</td>
+                                            <td>{{ $item->UserTime->created_at }}</td>
+                                            <td>{{ $item->UserTime->updated_at }}</td>
                                             <td>
                                                 <div class="progress progress-xs">
                                                     <div class="progress-bar progress-bar-danger"
@@ -50,11 +53,13 @@
                             </table>
                         </div>
 
+                        @if(Auth::user()->is_admin)
                         <div class="card-footer clearfix">
                             <ul class="pagination pagination-sm m-0 float-right">
                                 {{ $TalypLogin->links() }}
                             </ul>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

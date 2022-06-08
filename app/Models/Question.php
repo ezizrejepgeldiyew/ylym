@@ -9,7 +9,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $perPage = 1;
+    // protected $perPage = 1;
 
     protected $fillable = ['lesson_id','question','answers','right_answer','bal'];
 
